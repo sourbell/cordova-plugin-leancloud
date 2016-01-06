@@ -42,3 +42,13 @@ These can be easily done with gulp, for example:
             .pipe(replace('<%APPKEY%>', config.leanAppKey))
             .pipe(gulp.dest("platforms/android/src/com/sum/cordova/leancloud"));
     });
+
+## Android Gradle
+add these lines to build.gradle
+
+    android{ 
+        packagingOptions {
+            exclude 'META-INF/LICENSE.txt'
+            exclude 'META-INF/NOTICE.txt'
+        }
+    }
