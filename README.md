@@ -3,6 +3,11 @@ cordova-plugin-lean-push
 
 Cordova plugin for LeanCloud push notification
 
+## LATEST VERSION
+
+iOS v3.1.7.1
+Android v3.12.2
+
 ## Installation
     
     cordova plugin add git@github.com:Hybrid-Force/cordova-plugin-leancloud.git --variable LEAN_APP_ID=<YOUR_LEANCOULD_APP_ID> --variable LEAN_APP_KEY=<YOUR_LEANCOULD_APP_KEY>

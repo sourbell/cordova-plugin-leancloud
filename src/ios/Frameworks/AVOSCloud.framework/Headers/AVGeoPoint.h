@@ -1,6 +1,6 @@
 //
 //  AVGeoPoint.h
-//  AVOS Cloud
+//  LeanCloud
 //
 
 
@@ -42,6 +42,7 @@
  */
 + (AVGeoPoint *)geoPointWithLatitude:(double)latitude longitude:(double)longitude;
 
+#if AVOS_IOS_ONLY
 /*!
  Fetches the user's current location and returns a new AVGeoPoint object via the
  provided block.
@@ -49,6 +50,7 @@
  argument.
  */
 + (void)geoPointForCurrentLocationInBackground:(void(^)(AVGeoPoint *geoPoint, NSError *error))geoPointHandler;
+#endif
 
 /** @name Controlling Position */
 
