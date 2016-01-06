@@ -10,7 +10,7 @@ Android v3.12.2
 
 ## Installation
     
-    cordova plugin add git@github.com:Hybrid-Force/cordova-plugin-leancloud.git --variable LEAN_APP_ID=<YOUR_LEANCOULD_APP_ID> --variable LEAN_APP_KEY=<YOUR_LEANCOULD_APP_KEY>
+    cordova plugin add https://github.com/sourbell/cordova-plugin-leancloud --variable LEAN_APP_ID=<YOUR_LEANCOULD_APP_ID> --variable LEAN_APP_KEY=<YOUR_LEANCOULD_APP_KEY>
 
 ## Android Quirk
 The LeanCloud push service need to be initialized in Application::onCreate, otherwise, the app might crash when opening via push notification when the app is not running in foreground. To fix this, add an application where we can initialize the push service.
