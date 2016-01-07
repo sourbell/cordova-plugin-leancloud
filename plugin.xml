@@ -29,8 +29,8 @@
     </config-file>
 
     <!-- Plugin source code -->
-    <header-file src="src/ios/LeanSocial.h"/>
-    <source-file src="src/ios/LeanSocial.m"/>
+    <header-file src="src/ios/CDVLeanSocial.h"/>
+    <source-file src="src/ios/CDVLeanSocial.m"/>
     <header-file src="src/ios/CDVLeanAnalytics.h"/>
     <source-file src="src/ios/CDVLeanAnalytics.m"/>
     <header-file src="src/ios/CDVLeanPush.h"/>
