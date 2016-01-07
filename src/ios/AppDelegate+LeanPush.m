@@ -1,7 +1,7 @@
 #import "AppDelegate+LeanPush.h"
 #import "CDVLeanPush.h"
 #import <AVOSCloud/AVOSCloud.h>
-#import <AVOSCloudSNS/AVOSCloudSNS.h>
+#import "AVOSCloudSNS.h"
 #import <objc/runtime.h>
 #import <Cordova/CDV.h>
 

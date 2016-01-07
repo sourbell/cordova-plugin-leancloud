@@ -24,6 +24,9 @@
       <feature name="LeanAnalytics">
         <param name="ios-package" value="CDVLeanAnalytics"/>
       </feature>
+      <feature name="LeanSocial">
+        <param name="ios-package" value="CDVLeanSocial"/>
+      </feature>
       <preference name="leancloud-appid" value="$LEAN_APP_ID"/>
       <preference name="leancloud-appkey" value="$LEAN_APP_KEY"/>
     </config-file>
