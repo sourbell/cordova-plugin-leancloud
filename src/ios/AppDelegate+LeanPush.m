@@ -1,7 +1,6 @@
 #import "AppDelegate+LeanPush.h"
 #import "CDVLeanPush.h"
 #import <AVOSCloud/AVOSCloud.h>
-#import "AVOSCloudSNS.h"
 #import <objc/runtime.h>
 #import <Cordova/CDV.h>
 
@@ -48,7 +47,6 @@ void swizzleMethod(Class c, SEL originalSelector)
         swizzleMethod(cls, @selector(application:didFailToRegisterForRemoteNotificationsWithError:));
         swizzleMethod(cls, @selector(application:didReceiveRemoteNotification:));
         swizzleMethod(cls, @selector(applicationDidBecomeActive:));
-        swizzleMethod(cls, @selector(application:handleOpenURL:));
     });
 }
 
@@ -195,14 +193,5 @@ void swizzleMethod(Class c, SEL originalSelector)
 
 -(void)noop_application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {}
-
-
-- (BOOL)swizzled_application:(UIApplication *)application handleOpenURL:(NSURL *)url {
-    return [AVOSCloudSNS handleOpenURL:url];
-}
-
-- (BOOL)noop_application:(UIApplication *)application handleOpenURL:(NSURL *)url {
-    
-}
 
 @end
