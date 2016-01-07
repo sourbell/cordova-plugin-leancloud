@@ -9,6 +9,9 @@
   <js-module src="www/LeanAnalytics.js" name="LeanAnalytics">
     <clobbers target="LeanAnalytics"/>
   </js-module>
+  <js-module src="www/LeanSocial.js" name="LeanSocial">
+    <clobbers target="LeanSocial"/>
+  </js-module>
   
   <preference name="LEAN_APP_ID"/>
   <preference name="LEAN_APP_KEY"/>
@@ -26,12 +29,73 @@
     </config-file>
 
     <!-- Plugin source code -->
+    <header-file src="src/ios/LeanSocial.h"/>
+    <source-file src="src/ios/LeanSocial.m"/>
     <header-file src="src/ios/CDVLeanAnalytics.h"/>
     <source-file src="src/ios/CDVLeanAnalytics.m"/>
     <header-file src="src/ios/CDVLeanPush.h"/>
     <source-file src="src/ios/CDVLeanPush.m"/>
     <header-file src="src/ios/AppDelegate+LeanPush.h"/>
     <source-file src="src/ios/AppDelegate+LeanPush.m"/>
+
+    <header-file src="src/ios/LeanSocial/AVOSCloudSNS_.h"/>
+    <header-file src="src/ios/LeanSocial/AVOSCloudSNS.h"/>
+    <source-file src="src/ios/LeanSocial/AVOSCloudSNS.m"/>
+    <header-file src="src/ios/LeanSocial/AVOSCloudSNSUtils.h"/>
+    <source-file src="src/ios/LeanSocial/AVOSCloudSNSUtils.m"/>
+    <header-file src="src/ios/LeanSocial/AVSNSHttpClient.h"/>
+    <source-file src="src/ios/LeanSocial/AVSNSHttpClient.m"/>
+    <header-file src="src/ios/LeanSocial/AVSNSLoginViewController.h"/>
+    <source-file src="src/ios/LeanSocial/AVSNSLoginViewController.m"/>
+    <header-file src="src/ios/LeanSocial/AVSNSWebViewController.h"/>
+    <source-file src="src/ios/LeanSocial/AVSNSWebViewController.m"/>
+    <header-file src="src/ios/LeanSocial/AVUser+SNS.h"/>
+    <source-file src="src/ios/LeanSocial/AVUser+SNS.m"/>
+    <header-file src="src/ios/LeanSocial/AVWebViewController.h"/>
+    <source-file src="src/ios/LeanSocial/AVWebViewController.m"/>
+    <header-file src="src/ios/LeanSocial/NSURL+AVAdditions.h"/>
+    <source-file src="src/ios/LeanSocial/NSURL+AVAdditions.m"/>
+
+    <!-- AFNetworking -->
+    <header-file src="src/ios/AFNetworking/AFHTTPRequestOperation.h"/>
+    <source-file src="src/ios/AFNetworking/AFHTTPRequestOperation.m"/>
+    <header-file src="src/ios/AFNetworking/AFHTTPRequestOperationManager.h"/>
+    <source-file src="src/ios/AFNetworking/AFHTTPRequestOperationManager.m"/>
+    <header-file src="src/ios/AFNetworking/AFHTTPSessionManager.h"/>
+    <source-file src="src/ios/AFNetworking/AFHTTPSessionManager.m"/>
+    <header-file src="src/ios/AFNetworking/AFNetworkReachabilityManager.h"/>
+    <source-file src="src/ios/AFNetworking/AFNetworkReachabilityManager.m"/>
+    <header-file src="src/ios/AFNetworking/AFSecurityPolicy.h"/>
+    <source-file src="src/ios/AFNetworking/AFSecurityPolicy.m"/>
+    <header-file src="src/ios/AFNetworking/AFURLConnectionOperation.h"/>
+    <source-file src="src/ios/AFNetworking/AFURLConnectionOperation.m"/>
+    <header-file src="src/ios/AFNetworking/AFURLRequestSerialization.h"/>
+    <source-file src="src/ios/AFNetworking/AFURLRequestSerialization.m"/>
+    <header-file src="src/ios/AFNetworking/AFURLResponseSerialization.h"/>
+    <source-file src="src/ios/AFNetworking/AFURLResponseSerialization.m"/>
+    <header-file src="src/ios/AFNetworking/AFURLSessionManager.h"/>
+    <source-file src="src/ios/AFNetworking/AFURLSessionManager.m"/>
+    <header-file src="src/ios/AFNetworking/AFNetworking.h"/>
+
+    <!-- UIKit+AFNetworking -->
+    <header-file src="src/ios/UIKit+AFNetworking/AFNetworkActivityIndicatorManager.h"/>
+    <source-file src="src/ios/UIKit+AFNetworking/AFNetworkActivityIndicatorManager.m"/>
+    <header-file src="src/ios/UIKit+AFNetworking/UIActivityIndicatorView+AFNetworking.h"/>
+    <source-file src="src/ios/UIKit+AFNetworking/UIActivityIndicatorView+AFNetworking.m"/>
+    <header-file src="src/ios/UIKit+AFNetworking/UIAlertView+AFNetworking.h"/>
+    <source-file src="src/ios/UIKit+AFNetworking/UIAlertView+AFNetworking.m"/>
+    <header-file src="src/ios/UIKit+AFNetworking/UIButton+AFNetworking.h"/>
+    <source-file src="src/ios/UIKit+AFNetworking/UIButton+AFNetworking.m"/>
+    <header-file src="src/ios/UIKit+AFNetworking/UIImageView+AFNetworking.h"/>
+    <source-file src="src/ios/UIKit+AFNetworking/UIImageView+AFNetworking.m"/>
+    <header-file src="src/ios/UIKit+AFNetworking/UIProgressView+AFNetworking.h"/>
+    <source-file src="src/ios/UIKit+AFNetworking/UIProgressView+AFNetworking.m"/>
+    <header-file src="src/ios/UIKit+AFNetworking/UIRefreshControl+AFNetworking.h"/>
+    <source-file src="src/ios/UIKit+AFNetworking/UIRefreshControl+AFNetworking.m"/>
+    <header-file src="src/ios/UIKit+AFNetworking/UIWebView+AFNetworking.h"/>
+    <source-file src="src/ios/UIKit+AFNetworking/UIWebView+AFNetworking.m"/>
+    <header-file src="src/ios/UIKit+AFNetworking/UIImage+AFNetworking.h"/>
+    <header-file src="src/ios/UIKit+AFNetworking/UIKit+AFNetworking.h"/>
 
     <!-- LeanCloud Official -->
     <framework src="src/ios/Frameworks/AVOSCloud.framework" custom="true"/>

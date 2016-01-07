@@ -4,6 +4,13 @@
 
 @implementation CDVLeanPush
 
+@synthesize notificationMessage;
+@synthesize isInline;
+
+@synthesize callbackId;
+@synthesize notificationCallbackId;
+@synthesize callback;
+
 - (void)subscribe:(CDVInvokedUrlCommand*)command
 {
     CDVPluginResult* pluginResult = nil;
@@ -181,6 +188,63 @@
     }
 
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
+
+
+- (void)notificationReceived
+{
+    NSLog(@"Notification received");
+    
+    NSMutableString *jsonStr = [NSMutableString stringWithString:@"{"];
+    
+    [self parseDictionary:notificationMessage intoJSON:jsonStr];
+    
+    if (isInline)
+    {
+        [jsonStr appendFormat:@"foreground:\"%d\"", 1];
+        isInline = NO;
+    }
+    else
+        [jsonStr appendFormat:@"foreground:\"%d\"", 0];
+    
+    [jsonStr appendString:@"}"];
+//    NSLog(@"Msg: %@", jsonStr);
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.commandDelegate evalJs:[NSString stringWithFormat:@"cordova.fireDocumentEvent('leanpush.openNotification',%@)",jsonStr]];
+    });
+    
+    if (notificationMessage && self.callback)
+    {
+        NSString * jsCallBack = [NSString stringWithFormat:@"%@(%@);", self.callback, jsonStr];
+        [self.webView stringByEvaluatingJavaScriptFromString:jsCallBack];
+        
+        self.notificationMessage = nil;
+    }
+}
+
+-(void)parseDictionary:(NSDictionary *)inDictionary intoJSON:(NSMutableString *)jsonString
+{
+    NSArray         *keys = [inDictionary allKeys];
+    NSString        *key;
+    
+    for (key in keys)
+    {
+        id thisObject = [inDictionary objectForKey:key];
+        
+        if ([thisObject isKindOfClass:[NSDictionary class]])
+            [self parseDictionary:thisObject intoJSON:jsonString];
+        else if ([thisObject isKindOfClass:[NSString class]])
+            [jsonString appendFormat:@"\"%@\":\"%@\",",
+             key,
+             [[[[inDictionary objectForKey:key]
+                stringByReplacingOccurrencesOfString:@"\\" withString:@"\\\\"]
+               stringByReplacingOccurrencesOfString:@"\"" withString:@"\\\""]
+              stringByReplacingOccurrencesOfString:@"\n" withString:@"\\n"]];
+        else {
+            [jsonString appendFormat:@"\"%@\":\"%@\",", key, [inDictionary objectForKey:key]];
+        }
+    }
 }
 
 @end

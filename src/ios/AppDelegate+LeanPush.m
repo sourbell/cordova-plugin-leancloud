@@ -1,7 +1,9 @@
 #import "AppDelegate+LeanPush.h"
 #import "CDVLeanPush.h"
 #import <AVOSCloud/AVOSCloud.h>
+#import <AVOSCloudSNS/AVOSCloudSNS.h>
 #import <objc/runtime.h>
+#import <Cordova/CDV.h>
 
 @implementation AppDelegate (CDVLean)
 
@@ -11,16 +13,16 @@ void swizzleMethod(Class c, SEL originalSelector)
     
     SEL swizzledSelector = NSSelectorFromString([@"swizzled_" stringByAppendingString:original]);
     SEL noopSelector = NSSelectorFromString([@"noop_" stringByAppendingString:original]);
-
+    
     Method originalMethod, swizzledMethod, noop;
     originalMethod = class_getInstanceMethod(c, originalSelector);
     swizzledMethod = class_getInstanceMethod(c, swizzledSelector);
     noop = class_getInstanceMethod(c, noopSelector);
     
     BOOL didAddMethod = class_addMethod(c,
-                    originalSelector,
-                    method_getImplementation(swizzledMethod),
-                    method_getTypeEncoding(swizzledMethod));
+                                        originalSelector,
+                                        method_getImplementation(swizzledMethod),
+                                        method_getTypeEncoding(swizzledMethod));
     
     if (didAddMethod)
     {
@@ -46,6 +48,7 @@ void swizzleMethod(Class c, SEL originalSelector)
         swizzleMethod(cls, @selector(application:didFailToRegisterForRemoteNotificationsWithError:));
         swizzleMethod(cls, @selector(application:didReceiveRemoteNotification:));
         swizzleMethod(cls, @selector(applicationDidBecomeActive:));
+        swizzleMethod(cls, @selector(application:handleOpenURL:));
     });
 }
 
@@ -79,13 +82,13 @@ void swizzleMethod(Class c, SEL originalSelector)
                     [AVAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
                 }
             }
-
+            
             // register remote notification
             if ([application respondsToSelector:@selector(isRegisteredForRemoteNotifications)]==NO) {
                 [application registerForRemoteNotificationTypes:
-                                UIRemoteNotificationTypeBadge |
-                                UIRemoteNotificationTypeAlert |
-                                UIRemoteNotificationTypeSound];
+                 UIRemoteNotificationTypeBadge |
+                 UIRemoteNotificationTypeAlert |
+                 UIRemoteNotificationTypeSound];
             } else {
                 UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound categories:nil];
                 [application registerUserNotificationSettings:settings];
@@ -123,7 +126,7 @@ void swizzleMethod(Class c, SEL originalSelector)
 - (void)swizzled_application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
     [self swizzled_application:application didRegisterForRemoteNotificationsWithDeviceToken:deviceToken];
-
+    
     NSLog(@"didRegister");
     AVInstallation *currentInstallation = [AVInstallation currentInstallation];
     [currentInstallation setDeviceTokenFromData:deviceToken];
@@ -138,7 +141,7 @@ void swizzleMethod(Class c, SEL originalSelector)
 -(void)swizzled_application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
 {
     [self swizzled_application:application didFailToRegisterForRemoteNotificationsWithError:error];
-
+    
     [AVAnalytics event:@"Failed enable push notification" label:[error description]];
     NSLog(@"error=%@",[error description]);
 }
@@ -150,15 +153,35 @@ void swizzleMethod(Class c, SEL originalSelector)
 -(void)swizzled_application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
     [self swizzled_application:application didReceiveRemoteNotification:userInfo];
-
-    if (application.applicationState == UIApplicationStateActive) {
-        // Do nothing
+    
+    UIApplicationState appState = UIApplicationStateActive;
+    if ([application respondsToSelector:@selector(applicationState)]) {
+        appState = application.applicationState;
+    }
+    
+    CDVLeanPush *cdvLeanPush = [self.viewController getCommandInstance:@"LeanPush"];
+    cdvLeanPush.notificationMessage = userInfo;
+    if (appState == UIApplicationStateActive) {
+        cdvLeanPush.isInline = YES;
     } else {
-        // The application was just brought from the background to the foreground,
-        // so we consider the app as having been "opened by a push notification."
+        //save it for later
+        cdvLeanPush.isInline = NO;
+
         [AVAnalytics trackAppOpenedWithRemoteNotificationPayload:userInfo];
     }
-
+    
+    [cdvLeanPush notificationReceived];
+//    NSError  *error;
+//    NSData   *jsonData   = [NSJSONSerialization dataWithJSONObject:userInfo options:0 error:&error];
+//    NSString *jsonString = [[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding];
+//    
+//    CDVLeanPush *cdvLeanPush = [self.viewController getCommandInstance:@"CDVLeanPush"];
+//    if (!error) {
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            [[cdvLeanPush commandDelegate] evalJs:[NSString stringWithFormat:@"cordova.fireDocumentEvent('leanpush.openNotification',%@)",jsonString]];
+//        });
+//    }
+    
     int num=application.applicationIconBadgeNumber;
     if(num!=0){
         AVInstallation *currentInstallation = [AVInstallation currentInstallation];
@@ -172,5 +195,14 @@ void swizzleMethod(Class c, SEL originalSelector)
 
 -(void)noop_application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {}
+
+
+- (BOOL)swizzled_application:(UIApplication *)application handleOpenURL:(NSURL *)url {
+    return [AVOSCloudSNS handleOpenURL:url];
+}
+
+- (BOOL)noop_application:(UIApplication *)application handleOpenURL:(NSURL *)url {
+    
+}
 
 @end
